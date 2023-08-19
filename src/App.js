@@ -1,32 +1,34 @@
 import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-// import { setAuth, getAuth, removeAuth } from './redux/reducer/authReducer'
 import { setUser } from './redux/action/userAction'
+import { setAuth, removeAuth } from './redux/reducer/authReducer'
 
 function App() {
     const [name, setName] = useState('')
     const [id, setId] = useState('')
-    // const [token, setToken] = useState('')
+    const [token, setToken] = useState('')
 
     const userState = useSelector((state) => state.user.info)
-    // const authToken = useSelector((state) => state.auth.auth)
+    const authToken = useSelector((state) => state.auth.token)
     const dispatch = useDispatch()
 
-    const handleSaveUser = () => {
-        dispatch(setUser({ name, id }))
+    const data = {
+        name: 'Antor',
+        role: 'Admin',
+        id: 1,
     }
 
-    // const handleSaveToken = () => {
-    //     dispatch(setAuth(token))
-    // }
+    const handleSaveUser = () => {
+        dispatch(setUser(data))
+    }
 
-    // const handleGetToken = () => {
-    //     dispatch(getAuth())
-    // }
+    const handleSaveToken = () => {
+        dispatch(setAuth(token))
+    }
 
-    // const handleRemoveToken = () => {
-    //     dispatch(removeAuth())
-    // }
+    const handleRemoveToken = () => {
+        dispatch(removeAuth())
+    }
 
     return (
         <div className="App">
@@ -43,14 +45,13 @@ function App() {
                     </div>
                 )}
             </div>
-            {/* <div>
+            <div>
                 <h2>Authentication</h2>
                 <input type="text" placeholder="Token" value={token} onChange={(e) => setToken(e.target.value)} />
                 <button onClick={handleSaveToken}>Save Token</button>
-                <button onClick={handleGetToken}>Get Token</button>
                 <button onClick={handleRemoveToken}>Remove Token</button>
                 {authToken && <p>Token: {authToken}</p>}
-            </div> */}
+            </div>
         </div>
     )
 }

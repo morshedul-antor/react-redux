@@ -1,8 +1,7 @@
-// localStorageMiddleware.js
-const localStorageMiddleware = (key) => (store) => (next) => (action) => {
+const createLocalStorageMiddleware = (key) => (store) => (next) => (action) => {
     const result = next(action)
-    localStorage.setItem(key, JSON.stringify(store.getState()))
+    localStorage.setItem(key, JSON.stringify(store.getState()[key.split(',')[0]]))
     return result
 }
 
-export default localStorageMiddleware
+export default createLocalStorageMiddleware

@@ -1,17 +1,10 @@
 const SET_AUTH = 'SET_AUTH'
-const GET_AUTH = 'GET_AUTH'
 const REMOVE_AUTH = 'REMOVE_AUTH'
 
-export function setAuth(token) {
+export function setAuth(auth) {
     return {
         type: SET_AUTH,
-        payload: { auth: false, token: token },
-    }
-}
-
-export function getAuth() {
-    return {
-        type: GET_AUTH,
+        payload: auth,
     }
 }
 
@@ -21,8 +14,9 @@ export function removeAuth() {
     }
 }
 
-const initialState = {
-    auth: { auth: false, token: '' },
+export const initialState = {
+    auth: false,
+    token: '',
 }
 
 export default function authReducer(state = initialState, action) {
@@ -30,16 +24,13 @@ export default function authReducer(state = initialState, action) {
         case SET_AUTH:
             return {
                 ...state,
-                auth: action.payload,
-            }
-        case GET_AUTH:
-            return {
-                ...state,
+                auth: true,
+                token: action.payload,
             }
         case REMOVE_AUTH:
             return {
-                ...state,
-                auth: { auth: false, token: '' },
+                auth: false,
+                token: '',
             }
         default:
             return state

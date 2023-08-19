@@ -1,35 +1,52 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux'
-import localStorageMiddleware from '../middleware/localStorageMiddleware'
-// import authReducer from '../reducer/authReducer'
+import createLocalStorageMiddleware from '../middleware/localStorageMiddleware'
+import authReducer from '../reducer/authReducer'
+import themeReducer from '../reducer/themeReducer'
 import userReducer from '../reducer/userReducer'
 
 const rootReducer = combineReducers({
-    // auth: authReducer,
+    auth: authReducer,
     user: userReducer,
+    theme: themeReducer,
 })
 
-// const authPersistedState = JSON.parse(localStorage.getItem('auth')) || {}
+// get localStorage with key
+const authPersistedState = JSON.parse(localStorage.getItem('auth'))
 const userPersistedState = JSON.parse(localStorage.getItem('user'))
+const themePersistedState = JSON.parse(localStorage.getItem('theme'))
 
-// const authLocalStorageMiddleware = localStorageMiddleware('auth')
-const userLocalStorageMiddleware = localStorageMiddleware('user')
+// create localStorage with key
+const authLocalStorageMiddleware = createLocalStorageMiddleware('auth')
+const userLocalStorageMiddleware = createLocalStorageMiddleware('user')
+const themeLocalStorageMiddleware = createLocalStorageMiddleware('theme')
 
-const defaultInitialState = {
-    user: {
-        info: null,
-    },
-    auth: {
-        auth: null,
-    },
-}
-
+// store all
 const store = createStore(
     rootReducer,
     {
-        // auth: { ...authPersistedState },
-        user: userPersistedState !== null ? userPersistedState : defaultInitialState.user,
+        auth: authPersistedState,
+        user: userPersistedState,
+        theme: themePersistedState,
     },
-    applyMiddleware(userLocalStorageMiddleware)
+    // last one first fetch
+    applyMiddleware(themeLocalStorageMiddleware, userLocalStorageMiddleware, authLocalStorageMiddleware)
 )
+
+// if local storage is cleared, reset state to initial state
+if (authPersistedState === null) {
+    store.dispatch({
+        type: 'REMOVE_AUTH',
+    })
+}
+if (userPersistedState === null) {
+    store.dispatch({
+        type: 'REMOVE_USER',
+    })
+}
+if (themePersistedState === null) {
+    store.dispatch({
+        type: 'REMOVE_THEME',
+    })
+}
 
 export default store
